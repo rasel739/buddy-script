@@ -3,7 +3,7 @@ import Header from '@/components/layout/header';
 import LeftSidebar from '@/components/layout/left-sidebar';
 import MobileNavigation from '@/components/layout/mobile-navigation';
 import RightSidebar from '@/components/layout/right-sidebar';
-import ThemeSwitcher from '@/components/theme-switcher';
+import ThemeSwitcher from '@/components/ui/theme-switcher';
 
 export default function Home() {
   return (

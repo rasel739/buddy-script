@@ -1,11 +1,12 @@
-export interface FormData {
+export interface LoginType {
   email: string;
   password: string;
   rememberMe: boolean;
 }
 
 export interface RegisterFormData {
-  name: string;
+  firstName: string;
+  lastName: string;
   email: string;
   password: string;
   repeatPassword: string;
@@ -69,3 +70,12 @@ export interface NotificationItem {
   time: string;
   isRead: boolean;
 }
+
+export interface StoryItem {
+  id: string;
+  name: string;
+  image: string;
+  type: 'your' | 'active' | 'inactive';
+}
+
+export type ReactionType = 'like' | 'comment' | 'share';

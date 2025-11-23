@@ -5,6 +5,7 @@ import HeaderDropDown from '../ui/dropdown';
 import { NOTIFICATION } from '@/constrants';
 import Image from 'next/image';
 import SearchInput from '../ui/search-input';
+import Icons from '@/lib/icons';
 
 const Header: FC = () => {
   const [showNotifications, setShowNotifications] = useState<boolean>(false);
@@ -203,8 +204,8 @@ const Header: FC = () => {
                       </Link>
                     </div>
                     <div className='_header_mobile_menu_right'>
-                      <form className='_header_form_grp' onSubmit={handleSearch}>
-                        <button type='submit' className='_header_mobile_search' aria-label='Search'>
+                      <form className='_header_form_grp'>
+                        <a href='#0' className='_header_mobile_search'>
                           <svg
                             xmlns='http://www.w3.org/2000/svg'
                             width='17'
@@ -213,10 +214,34 @@ const Header: FC = () => {
                             viewBox='0 0 17 17'
                           >
                             <circle cx='7' cy='7' r='6' stroke='#666' />
-                            <path stroke='#666' strokeLinecap='round' d='M16 16l-3-3' />
+                            <path stroke='#666' stroke-linecap='round' d='M16 16l-3-3' />
                           </svg>
-                        </button>
+                        </a>
                       </form>
+                      <div className='_header_mobile_toggle'>
+                        <form action='/mobileMenu.html'>
+                          <button
+                            type='submit'
+                            className='_header_mobile_btn_link'
+                            value='go to mobile menu'
+                          >
+                            <svg
+                              xmlns='http://www.w3.org/2000/svg'
+                              width='18'
+                              height='14'
+                              fill='none'
+                              viewBox='0 0 18 14'
+                            >
+                              <path
+                                stroke='#666'
+                                stroke-linecap='round'
+                                stroke-width='1.5'
+                                d='M1 1h16M1 7h16M1 13h16'
+                              />
+                            </svg>
+                          </button>
+                        </form>
+                      </div>
                     </div>
                   </div>
                 </div>

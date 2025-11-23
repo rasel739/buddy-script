@@ -1,3 +1,4 @@
+import { ReactionType } from '@/types';
 import Image from 'next/image';
 
 export type ButtonVariant =
@@ -107,7 +108,15 @@ export const SocialButton: React.FC<
   }
 > = ({ provider, children, ...props }) => {
   const icons = {
-    google: <Image src='/images/google.svg' alt='Google icon' className='_google_img' />,
+    google: (
+      <Image
+        src='/images/google.svg'
+        alt='Google icon'
+        className='_google_img'
+        width={20}
+        height={20}
+      />
+    ),
   };
 
   return (
@@ -129,7 +138,7 @@ export const IconButton: React.FC<Omit<ButtonProps, 'variant' | 'iconPosition'>>
 
 export const ReactionButton: React.FC<
   Omit<ButtonProps, 'variant'> & {
-    reactionType?: 'like' | 'comment' | 'share';
+    reactionType?: ReactionType;
   }
 > = ({ reactionType, active, children, icon, ...props }) => {
   return (

@@ -36,7 +36,7 @@ const FeedContent: FC = () => {
       title: '-Healthy Tracking App',
       image: '/images/timeline_img.png',
       reactions: {
-        count: 9,
+        count: 200,
         types: ['haha', 'like', 'love'],
       },
       comments: 12,
