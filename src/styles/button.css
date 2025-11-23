@@ -1,0 +1,99 @@
+._btn_sm {
+  padding: 6px 16px;
+  font-size: 12px;
+}
+
+._btn_md {
+  padding: 10px 20px;
+  font-size: 14px;
+}
+
+._btn_lg {
+  padding: 14px 28px;
+  font-size: 16px;
+}
+
+._full_width {
+  width: 100%;
+}
+
+._btn_icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  &._icon_left {
+    margin-right: 4px;
+  }
+
+  &._icon_right {
+    margin-left: 4px;
+  }
+
+  svg,
+  img {
+    display: block;
+  }
+}
+
+._btn_text {
+  display: inline-block;
+}
+
+._btn_loader {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 8px;
+}
+
+._spinner {
+  width: 16px;
+  height: 16px;
+  animation: rotate 1s linear infinite;
+}
+
+._spinner_path {
+  stroke: currentColor;
+  stroke-linecap: round;
+  animation: dash 1.5s ease-in-out infinite;
+}
+
+@keyframes rotate {
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes dash {
+  0% {
+    stroke-dasharray: 1, 150;
+    stroke-dashoffset: 0;
+  }
+  50% {
+    stroke-dasharray: 90, 150;
+    stroke-dashoffset: -35;
+  }
+  100% {
+    stroke-dasharray: 90, 150;
+    stroke-dashoffset: -124;
+  }
+}
+
+._loading {
+  pointer-events: none;
+  position: relative;
+
+  ._btn_text,
+  ._btn_icon {
+    visibility: hidden;
+  }
+
+  ._btn_loader {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    margin: 0;
+  }
+}

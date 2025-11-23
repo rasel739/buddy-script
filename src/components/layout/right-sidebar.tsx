@@ -1,45 +1,15 @@
 'use client';
 import { FC, useState } from 'react';
 import Link from 'next/link';
-
-interface Friend {
-  id: string;
-  name: string;
-  title: string;
-  image: string;
-  isOnline: boolean;
-  lastSeen?: string;
-}
+import Image from 'next/image';
+import Icons from '@/lib/icons';
+import { FRIENDS } from '@/constrants';
+import SearchInput from '../ui/search-input';
 
 const RightSidebar: FC = () => {
   const [searchQuery, setSearchQuery] = useState<string>('');
 
-  const friends: Friend[] = [
-    {
-      id: '1',
-      name: 'Steve Jobs',
-      title: 'CEO of Apple',
-      image: '/images/people1.png',
-      isOnline: false,
-      lastSeen: '5 minute ago',
-    },
-    {
-      id: '2',
-      name: 'Ryan Roslansky',
-      title: 'CEO of Linkedin',
-      image: '/images/people2.png',
-      isOnline: true,
-    },
-    {
-      id: '3',
-      name: 'Dylan Field',
-      title: 'CEO of Figma',
-      image: '/images/people3.png',
-      isOnline: true,
-    },
-  ];
-
-  const filteredFriends = friends.filter(
+  const filteredFriends = FRIENDS.filter(
     (friend) =>
       friend.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
       friend.title.toLowerCase().includes(searchQuery.toLowerCase())
@@ -55,13 +25,15 @@ const RightSidebar: FC = () => {
 
   return (
     <div className='_layout_right_sidebar_wrap'>
-      {/* You Might Like Section */}
       <div className='_layout_right_sidebar_inner'>
         <div className='_right_inner_area_info _padd_t24 _padd_b24 _padd_r24 _padd_l24 _b_radious6 _feed_inner_area'>
           <div className='_right_inner_area_info_content _mar_b24'>
             <h4 className='_right_inner_area_info_content_title _title5'>You Might Like</h4>
             <span className='_right_inner_area_info_content_txt'>
-              <Link className='_right_inner_area_info_content_txt_link' href='#'>
+              <Link
+                className='_right_inner_area_info_content_txt_link text-decoration-none'
+                href='#'
+              >
                 See All
               </Link>
             </span>
@@ -70,12 +42,18 @@ const RightSidebar: FC = () => {
           <div className='_right_inner_area_info_ppl'>
             <div className='_right_inner_area_info_box'>
               <div className='_right_inner_area_info_box_image'>
-                <Link href='/profile'>
-                  <img src='/images/Avatar.png' alt='Radovan SkillArena' className='_ppl_img' />
+                <Link href='/profile' className='text-decoration-none'>
+                  <Image
+                    src='/images/Avatar.png'
+                    alt='Radovan SkillArena'
+                    className='_ppl_img'
+                    width={100}
+                    height={100}
+                  />
                 </Link>
               </div>
               <div className='_right_inner_area_info_box_txt'>
-                <Link href='/profile'>
+                <Link href='/profile' className='text-decoration-none'>
                   <h4 className='_right_inner_area_info_box_title'>Radovan SkillArena</h4>
                 </Link>
                 <p className='_right_inner_area_info_box_para'>Founder & CEO at Trophy</p>
@@ -97,41 +75,24 @@ const RightSidebar: FC = () => {
         </div>
       </div>
 
-      {/* Your Friends Section */}
       <div className='_layout_right_sidebar_inner'>
         <div className='_feed_right_inner_area_card _padd_t24 _padd_b6 _padd_r24 _padd_l24 _b_radious6 _feed_inner_area'>
           <div className='_feed_top_fixed'>
             <div className='_feed_right_inner_area_card_content _mar_b24'>
               <h4 className='_feed_right_inner_area_card_content_title _title5'>Your Friends</h4>
               <span className='_feed_right_inner_area_card_content_txt'>
-                <Link className='_feed_right_inner_area_card_content_txt_link' href='/find-friends'>
+                <Link
+                  className='_feed_right_inner_area_card_content_txt_link text-decoration-none'
+                  href='/find-friends'
+                >
                   See All
                 </Link>
               </span>
             </div>
-            <form className='_feed_right_inner_area_card_form' onSubmit={(e) => e.preventDefault()}>
-              <svg
-                className='_feed_right_inner_area_card_form_svg'
-                xmlns='http://www.w3.org/2000/svg'
-                width='17'
-                height='17'
-                fill='none'
-                viewBox='0 0 17 17'
-              >
-                <circle cx='7' cy='7' r='6' stroke='#666' />
-                <path stroke='#666' strokeLinecap='round' d='M16 16l-3-3' />
-              </svg>
-              <input
-                className='form-control me-2 _feed_right_inner_area_card_form_inpt'
-                type='search'
-                placeholder='input search text'
-                aria-label='Search'
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-              />
-            </form>
+
+            <SearchInput value={searchQuery} onChange={setSearchQuery} />
           </div>
-          <div className='_feed_bottom_fixed'>
+          <div className='_feed_bottom_fixed mt-4'>
             {filteredFriends.map((friend) => (
               <div
                 key={friend.id}
@@ -141,40 +102,25 @@ const RightSidebar: FC = () => {
               >
                 <div className='_feed_right_inner_area_card_ppl_box'>
                   <div className='_feed_right_inner_area_card_ppl_image'>
-                    <Link href='/profile'>
-                      <img src={friend.image} alt={friend.name} className='_box_ppl_img' />
+                    <Link href='/profile' className='text-decoration-none'>
+                      <Image
+                        src={friend.image}
+                        alt={friend.name}
+                        className='_box_ppl_img'
+                        width={40}
+                        height={40}
+                      />
                     </Link>
                   </div>
                   <div className='_feed_right_inner_area_card_ppl_txt'>
-                    <Link href='/profile'>
+                    <Link href='/profile' className='text-decoration-none'>
                       <h4 className='_feed_right_inner_area_card_ppl_title'>{friend.name}</h4>
                     </Link>
                     <p className='_feed_right_inner_area_card_ppl_para'>{friend.title}</p>
                   </div>
                 </div>
                 <div className='_feed_right_inner_area_card_ppl_side'>
-                  {friend.isOnline ? (
-                    <svg
-                      xmlns='http://www.w3.org/2000/svg'
-                      width='14'
-                      height='14'
-                      fill='none'
-                      viewBox='0 0 14 14'
-                    >
-                      <rect
-                        width='12'
-                        height='12'
-                        x='1'
-                        y='1'
-                        fill='#0ACF83'
-                        stroke='#fff'
-                        strokeWidth='2'
-                        rx='6'
-                      />
-                    </svg>
-                  ) : (
-                    <span>{friend.lastSeen}</span>
-                  )}
+                  {friend.isOnline ? <Icons.OnlineStatus /> : <span>{friend.lastSeen}</span>}
                 </div>
               </div>
             ))}

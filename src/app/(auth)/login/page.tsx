@@ -1,4 +1,5 @@
 'use client';
+import Button, { SocialButton } from '@/components/ui/button';
 import Link from 'next/link';
 import { FC, FormEvent, useState } from 'react';
 
@@ -17,12 +18,11 @@ const Login: FC = () => {
 
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    // Handle login logic here
+
     console.log('Login submitted:', formData);
   };
 
   const handleGoogleSignIn = () => {
-    // Handle Google sign-in logic
     console.log('Google sign-in clicked');
   };
 
@@ -67,14 +67,15 @@ const Login: FC = () => {
                 <h4 className='_social_login_content_title _titl4 _mar_b50'>
                   Login to your account
                 </h4>
-                <button
-                  type='button'
-                  className='_social_login_content_btn _mar_b40'
+
+                <SocialButton
+                  provider='google'
                   onClick={handleGoogleSignIn}
+                  className='_mar_b40'
+                  icon={<img src='/images/google.svg' alt='Google icon' className='_google_img' />}
                 >
-                  <img src='/images/google.svg' alt='Google icon' className='_google_img' />
-                  <span>Or sign-in with google</span>
-                </button>
+                  Or sign-in with google
+                </SocialButton>
                 <div className='_social_login_content_bottom_txt _mar_b40'>
                   <span>Or</span>
                 </div>
@@ -116,7 +117,7 @@ const Login: FC = () => {
                       <div className='form-check _social_login_form_check'>
                         <input
                           className='form-check-input _social_login_form_check_input'
-                          type='checkbox'
+                          type='radio'
                           id='rememberMe'
                           checked={formData.rememberMe}
                           onChange={(e) =>
@@ -124,7 +125,7 @@ const Login: FC = () => {
                           }
                         />
                         <label
-                          className='form-check-label _social_login_form_check_label'
+                          className='form-check-label _social_registration_form_check_label'
                           htmlFor='rememberMe'
                         >
                           Remember me
@@ -140,9 +141,15 @@ const Login: FC = () => {
                   <div className='row'>
                     <div className='col-lg-12 col-md-12 col-xl-12 col-sm-12'>
                       <div className='_social_login_form_btn _mar_t40 _mar_b60'>
-                        <button type='submit' className='_social_login_form_btn_link _btn1'>
+                        <Button
+                          type='submit'
+                          variant='primary'
+                          className='_btn1'
+                          size='md'
+                          fullWidth
+                        >
                           Login now
-                        </button>
+                        </Button>
                       </div>
                     </div>
                   </div>
