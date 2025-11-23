@@ -1,4 +1,5 @@
 'use client';
+import Button, { SocialButton } from '@/components/ui/button';
 import { RegisterFormData } from '@/types';
 import Link from 'next/link';
 import { FC, FormEvent, useState } from 'react';
@@ -84,14 +85,14 @@ const Register: FC = () => {
                 </div>
                 <p className='_social_registration_content_para _mar_b8'>Get Started Now</p>
                 <h4 className='_social_registration_content_title _titl4 _mar_b50'>Registration</h4>
-                <button
-                  type='button'
-                  className='_social_registration_content_btn _mar_b40'
-                  onClick={handleGoogleRegister}
+
+                <SocialButton
+                  provider='google'
+                  icon={<img src='/images/google.svg' alt='Google icon' className='_google_img' />}
+                  className='_mar_b40'
                 >
-                  <img src='/images/google.svg' alt='Google icon' className='_google_img' />{' '}
-                  <span>Register with google</span>
-                </button>
+                  Register with google
+                </SocialButton>
                 <div className='_social_registration_content_bottom_txt _mar_b40'>
                   <span>Or</span>
                 </div>
@@ -175,9 +176,15 @@ const Register: FC = () => {
                   <div className='row'>
                     <div className='col-lg-12 col-md-12 col-xl-12 col-sm-12'>
                       <div className='_social_registration_form_btn _mar_t40 _mar_b60'>
-                        <button type='submit' className='_social_registration_form_btn_link _btn1'>
+                        <Button
+                          type='submit'
+                          variant='primary'
+                          className='_btn1'
+                          size='md'
+                          fullWidth
+                        >
                           Register now
-                        </button>
+                        </Button>
                       </div>
                     </div>
                   </div>

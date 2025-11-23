@@ -29,3 +29,43 @@ export interface Post {
   comments: number;
   shares: number;
 }
+
+export interface Friend {
+  id: string;
+  name: string;
+  title: string;
+  image: string;
+  isOnline: boolean;
+  lastSeen?: string;
+}
+
+export interface Story {
+  id: string;
+  name: string;
+  image: string;
+  isYours?: boolean;
+}
+
+export interface SuggestedPerson {
+  id: string;
+  name: string;
+  title: string;
+  image: string;
+}
+
+export interface Event {
+  id: string;
+  title: string;
+  date: string;
+  month: string;
+  peopleGoing: number;
+  image: string;
+}
+
+export interface NotificationItem {
+  id: string;
+  image: string;
+  message: string;
+  time: string;
+  isRead: boolean;
+}
