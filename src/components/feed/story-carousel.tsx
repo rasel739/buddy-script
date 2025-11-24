@@ -1,8 +1,11 @@
 'use client';
-import { STORIES } from '@/constrants';
+import { STORIES, STORY_MOBILE } from '@/constrants';
 import Icons from '@/lib/icons';
 import Image from 'next/image';
+
 import { FC } from 'react';
+import StoryCard from './story-card';
+import Link from 'next/link';
 
 const StoryCarousel: FC = () => {
   const handleAddStory = () => {
@@ -78,46 +81,8 @@ const StoryCarousel: FC = () => {
       <div className='_feed_inner_ppl_card_mobile _mar_b16'>
         <div className='_feed_inner_ppl_card_area'>
           <ul className='_feed_inner_ppl_card_area_list'>
-            <li className='_feed_inner_ppl_card_area_item'>
-              <button onClick={handleAddStory} className='_feed_inner_ppl_card_area_link'>
-                <div className='_feed_inner_ppl_card_area_story'>
-                  <Image
-                    src='/images/mobile_story_img.png'
-                    alt='Your story'
-                    className='_card_story_img'
-                    width={120}
-                    height={120}
-                  />
-                  <div className='_feed_inner_ppl_btn'>
-                    <button className='_feed_inner_ppl_btn_link' type='button'>
-                      <Icons.PlusAlt className='_feed_inner_ppl_btn_link_svg' />
-                    </button>
-                  </div>
-                </div>
-                <p className='_feed_inner_ppl_card_area_link_txt'>Your Story</p>
-              </button>
-            </li>
-            {[1, 2, 3, 4, 5, 6].map((item) => (
-              <li key={item} className='_feed_inner_ppl_card_area_item'>
-                <button className='_feed_inner_ppl_card_area_link'>
-                  <div
-                    className={
-                      item % 2 === 0
-                        ? '_feed_inner_ppl_card_area_story_inactive'
-                        : '_feed_inner_ppl_card_area_story_active'
-                    }
-                  >
-                    <Image
-                      src={`/images/mobile_story_img${item % 2 === 0 ? '2' : '1'}.png`}
-                      alt='Story'
-                      className='_card_story_img1'
-                      width={60}
-                      height={60}
-                    />
-                  </div>
-                  <p className='_feed_inner_ppl_card_area_txt'>Ryan...</p>
-                </button>
-              </li>
+            {STORY_MOBILE.map((item) => (
+              <StoryCard key={item.id} item={item} />
             ))}
           </ul>
         </div>

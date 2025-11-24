@@ -1,28 +1,34 @@
 'use client';
+import ShapeBlock from '@/components/auth/shape-block';
+import Form from '@/components/forms/form';
+import FormCheckBox from '@/components/forms/form-checkbox';
+import FormInput from '@/components/forms/form-input';
 import Button, { SocialButton } from '@/components/ui/button';
 import { RegisterFormData } from '@/types';
+import Image from 'next/image';
 import Link from 'next/link';
-import { FC, FormEvent, useState } from 'react';
+import { FC, useState } from 'react';
+import { SubmitHandler } from 'react-hook-form';
 
 const Register: FC = () => {
-  const [formData, setFormData] = useState<RegisterFormData>({
-    name: '',
-    email: '',
-    password: '',
-    repeatPassword: '',
-    agreeToTerms: true,
-  });
-
   const [errors, setErrors] = useState<Partial<RegisterFormData>>({});
 
-  const validateForm = (): boolean => {
+  const validateForm = ({
+    repeatPassword,
+    password,
+    agreeToTerms,
+  }: {
+    repeatPassword: string;
+    password: string;
+    agreeToTerms: boolean;
+  }): boolean => {
     const newErrors: Partial<RegisterFormData> = {};
 
-    if (formData.password !== formData.repeatPassword) {
+    if (password !== repeatPassword) {
       newErrors.repeatPassword = 'Passwords do not match';
     }
 
-    if (!formData.agreeToTerms) {
+    if (!agreeToTerms) {
       newErrors.agreeToTerms = false;
     }
 
@@ -30,165 +36,147 @@ const Register: FC = () => {
     return Object.keys(newErrors).length === 0;
   };
 
-  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    if (validateForm()) {
-      // Handle registration logic here
-      console.log('Registration submitted:', formData);
+  const onSubmit: SubmitHandler<RegisterFormData> = async (data) => {
+    if (
+      validateForm({
+        repeatPassword: data.repeatPassword,
+        password: data.password,
+        agreeToTerms: data.agreeToTerms,
+      })
+    ) {
+      console.log('Registration submitted:', data);
     }
   };
 
-  const handleGoogleRegister = () => {
-    // Handle Google registration logic
-    console.log('Google registration clicked');
-  };
+  // const handleGoogleRegister = () => {
+  //   console.log('Google registration clicked');
+  // };
 
   return (
     <section className='_social_registration_wrapper _layout_main_wrapper'>
-      <div className='_shape_one'>
-        <img src='/images/shape1.svg' alt='Shape decoration' className='_shape_img' />
-        <img src='/images/dark_shape.svg' alt='Dark shape decoration' className='_dark_shape' />
-      </div>
-      <div className='_shape_two'>
-        <img src='/images/shape2.svg' alt='Shape decoration' className='_shape_img' />
-        <img
-          src='/images/dark_shape1.svg'
-          alt='Dark shape decoration'
-          className='_dark_shape _dark_shape_opacity'
-        />
-      </div>
-      <div className='_shape_three'>
-        <img src='/images/shape3.svg' alt='Shape decoration' className='_shape_img' />
-        <img
-          src='/images/dark_shape2.svg'
-          alt='Dark shape decoration'
-          className='_dark_shape _dark_shape_opacity'
-        />
-      </div>
+      <ShapeBlock />
       <div className='_social_registration_wrap'>
         <div className='container'>
           <div className='row align-items-center'>
             <div className='col-xl-8 col-lg-8 col-md-12 col-sm-12'>
               <div className='_social_registration_right'>
                 <div className='_social_registration_right_image'>
-                  <img src='/images/registration.png' alt='Registration illustration' />
+                  <Image
+                    src='/images/registration.png'
+                    alt='Registration illustration'
+                    width={500}
+                    height={500}
+                  />
                 </div>
                 <div className='_social_registration_right_image_dark'>
-                  <img src='/images/registration1.png' alt='Registration dark illustration' />
+                  <Image
+                    src='/images/registration1.png'
+                    alt='Registration dark illustration'
+                    width={500}
+                    height={500}
+                  />
                 </div>
               </div>
             </div>
             <div className='col-xl-4 col-lg-4 col-md-12 col-sm-12'>
               <div className='_social_registration_content'>
                 <div className='_social_registration_right_logo _mar_b28'>
-                  <img src='/images/logo.svg' alt='Company logo' className='_right_logo' />
+                  <Image
+                    src='/images/logo.svg'
+                    alt='Company logo'
+                    className='_right_logo'
+                    width={158}
+                    height={33}
+                  />
                 </div>
                 <p className='_social_registration_content_para _mar_b8'>Get Started Now</p>
                 <h4 className='_social_registration_content_title _titl4 _mar_b50'>Registration</h4>
 
-                <SocialButton
-                  provider='google'
-                  icon={<img src='/images/google.svg' alt='Google icon' className='_google_img' />}
-                  className='_mar_b40'
-                >
+                <SocialButton provider='google' className='_mar_b40'>
                   Register with google
                 </SocialButton>
                 <div className='_social_registration_content_bottom_txt _mar_b40'>
                   <span>Or</span>
                 </div>
-                <form className='_social_registration_form' onSubmit={handleSubmit}>
-                  <div className='row'>
-                    <div className='col-xl-12 col-lg-12 col-md-12 col-sm-12'>
-                      <div className='_social_registration_form_input _mar_b14'>
-                        <label htmlFor='email' className='_social_registration_label _mar_b8'>
-                          Email
-                        </label>
-                        <input
+                <Form submitHandler={onSubmit}>
+                  <div className='_social_registration_form'>
+                    <div className='row'>
+                      <div className='col-xl-12 col-lg-12 col-md-12 col-sm-12'>
+                        <FormInput
+                          name='firstName'
+                          label='First Name'
+                          type='text'
+                          id='firstName'
+                          className='_social_login_input'
+                          required
+                        />
+                        <FormInput
+                          name='lastName'
+                          label='Last Name'
+                          type='text'
+                          id='lastName'
+                          className='_social_login_input'
+                          required
+                        />
+
+                        <FormInput
+                          name='email'
+                          label='Email'
                           type='email'
                           id='email'
-                          className='form-control _social_registration_input'
-                          value={formData.email}
-                          onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                          className='_social_login_input'
                           required
                         />
-                      </div>
-                    </div>
-                    <div className='col-xl-12 col-lg-12 col-md-12 col-sm-12'>
-                      <div className='_social_registration_form_input _mar_b14'>
-                        <label htmlFor='password' className='_social_registration_label _mar_b8'>
-                          Password
-                        </label>
-                        <input
+
+                        <FormInput
+                          name='password'
+                          label='Password'
                           type='password'
                           id='password'
-                          className='form-control _social_registration_input'
-                          value={formData.password}
-                          onChange={(e) => setFormData({ ...formData, password: e.target.value })}
+                          className='_social_login_input'
                           required
                         />
-                      </div>
-                    </div>
-                    <div className='col-xl-12 col-lg-12 col-md-12 col-sm-12'>
-                      <div className='_social_registration_form_input _mar_b14'>
-                        <label
-                          htmlFor='repeatPassword'
-                          className='_social_registration_label _mar_b8'
-                        >
-                          Repeat Password
-                        </label>
-                        <input
+                        <FormInput
+                          name='repeatPassword'
+                          label='Repeat Password'
                           type='password'
-                          id='repeatPassword'
-                          className='form-control _social_registration_input'
-                          value={formData.repeatPassword}
-                          onChange={(e) =>
-                            setFormData({ ...formData, repeatPassword: e.target.value })
-                          }
+                          id='password'
+                          className='_social_login_input'
+                          error={errors.repeatPassword}
                           required
                         />
-                        {errors.repeatPassword && (
-                          <small className='text-danger'>{errors.repeatPassword}</small>
-                        )}
                       </div>
                     </div>
-                  </div>
-                  <div className='row'>
-                    <div className='col-lg-12 col-xl-12 col-md-12 col-sm-12'>
-                      <div className='form-check _social_registration_form_check'>
-                        <input
-                          className='form-check-input _social_registration_form_check_input'
-                          type='checkbox'
+                    <div className='row'>
+                      <div className='col-lg-12 col-xl-12 col-md-12 col-sm-12'>
+                        <FormCheckBox
+                          name='agreeToTerms'
+                          label=' I agree to terms & conditions'
                           id='agreeToTerms'
-                          checked={formData.agreeToTerms}
-                          onChange={(e) =>
-                            setFormData({ ...formData, agreeToTerms: e.target.checked })
-                          }
+                          type='radio'
+                          className='_social_login_form_check'
+                          inputClassName='_social_login_form_check_input'
+                          labelClassName='_social_registration_form_check_label'
                         />
-                        <label
-                          className='form-check-label _social_registration_form_check_label'
-                          htmlFor='agreeToTerms'
-                        >
-                          I agree to terms & conditions
-                        </label>
+                      </div>
+                    </div>
+                    <div className='row'>
+                      <div className='col-lg-12 col-md-12 col-xl-12 col-sm-12'>
+                        <div className='_social_registration_form_btn _mar_t40 _mar_b60'>
+                          <Button
+                            type='submit'
+                            variant='primary'
+                            className='_btn1'
+                            size='md'
+                            fullWidth
+                          >
+                            Register now
+                          </Button>
+                        </div>
                       </div>
                     </div>
                   </div>
-                  <div className='row'>
-                    <div className='col-lg-12 col-md-12 col-xl-12 col-sm-12'>
-                      <div className='_social_registration_form_btn _mar_t40 _mar_b60'>
-                        <Button
-                          type='submit'
-                          variant='primary'
-                          className='_btn1'
-                          size='md'
-                          fullWidth
-                        >
-                          Register now
-                        </Button>
-                      </div>
-                    </div>
-                  </div>
-                </form>
+                </Form>
                 <div className='row'>
                   <div className='col-xl-12 col-lg-12 col-md-12 col-sm-12'>
                     <div className='_social_registration_bottom_txt'>

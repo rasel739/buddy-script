@@ -1633,7 +1633,6 @@
   -o-transition: 0.2s all ease;
   transition: 0.2s all ease;
   cursor: pointer;
-  padding: 0 10px;
 }
 ._feed_common path {
   -webkit-transition: 0.2s all ease;
