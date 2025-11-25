@@ -16,13 +16,6 @@ export const PROFILE_DROPDOWN = [
     icon: Icons.Help,
     rightIcon: Icons.ChevronRight,
   },
-  {
-    id: 'lo3',
-    title: 'Log Out',
-    href: '/login',
-    icon: Icons.Logout,
-    rightIcon: Icons.ChevronRight,
-  },
 ];
 
 export const FRIENDS: Friend[] = [

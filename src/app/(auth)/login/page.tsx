@@ -1,4 +1,5 @@
 'use client';
+
 import ShapeBlock from '@/components/auth/shape-block';
 import Form from '@/components/forms/form';
 import FormCheckBox from '@/components/forms/form-checkbox';
@@ -7,16 +8,43 @@ import Button, { SocialButton } from '@/components/ui/button';
 import { LoginType } from '@/types';
 import Image from 'next/image';
 import Link from 'next/link';
-import { FC } from 'react';
+import { FC, useEffect } from 'react';
 import { SubmitHandler } from 'react-hook-form';
+import { useRouter } from 'next/navigation';
+import toast from 'react-hot-toast';
+import { useAppDispatch, useAppSelector } from '@/redux/hooks';
+import { clearError, login } from '@/redux/features/authSlice';
+import { yupResolver } from '@hookform/resolvers/yup';
+import { loginSchema } from '@/schema';
 
 const Login: FC = () => {
+  const dispatch = useAppDispatch();
+  const router = useRouter();
+  const { isLoading, error, isAuthenticated } = useAppSelector((state) => state.auth);
+
+  useEffect(() => {
+    if (isAuthenticated) {
+      router.push('/');
+    }
+  }, [isAuthenticated, router]);
+
+  useEffect(() => {
+    if (error) {
+      toast.error(error);
+      dispatch(clearError());
+    }
+  }, [error, dispatch]);
+
   const onSubmit: SubmitHandler<LoginType> = async (data) => {
-    console.log('Login submitted:', data);
+    const result = await dispatch(login(data));
+    if (login.fulfilled.match(result)) {
+      toast.success('Login successful!');
+      router.push('/');
+    }
   };
 
   const handleGoogleSignIn = () => {
-    console.log('Google sign-in clicked');
+    toast.error('Google sign-in not implemented yet');
   };
 
   return (
@@ -60,7 +88,11 @@ const Login: FC = () => {
                 <div className='_social_login_content_bottom_txt _mar_b40'>
                   <span>Or</span>
                 </div>
-                <Form submitHandler={onSubmit}>
+                <Form
+                  submitHandler={onSubmit}
+                  resolver={yupResolver(loginSchema)}
+                  defaultValues={{ email: '', password: '', rememberMe: false }}
+                >
                   <div className='_social_login_form'>
                     <div className='row'>
                       <div className='col-xl-12 col-lg-12 col-md-12 col-sm-12'>
@@ -110,8 +142,10 @@ const Login: FC = () => {
                             className='_btn1'
                             size='md'
                             fullWidth
+                            loading={isLoading}
+                            disabled={isLoading}
                           >
-                            Login now
+                            {isLoading ? 'Logging in...' : 'Login now'}
                           </Button>
                         </div>
                       </div>

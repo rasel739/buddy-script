@@ -16,6 +16,7 @@ type FormProps<T extends FieldValues> = {
   options?: UseFormProps<T>;
   resolver?: Resolver<T>;
   defaultValues?: DefaultValues<T>;
+  className?: string;
 };
 
 const Form = <T extends FieldValues>({
@@ -24,16 +25,22 @@ const Form = <T extends FieldValues>({
   options,
   resolver,
   defaultValues,
+  className = '',
 }: FormProps<T>) => {
   const methods = useForm<T>({
     ...options,
     resolver,
     defaultValues,
+    mode: 'onChange',
   });
 
   return (
     <FormProvider {...methods}>
-      <form onSubmit={methods.handleSubmit(submitHandler as SubmitHandler<FieldValues>)} noValidate>
+      <form
+        onSubmit={methods.handleSubmit(submitHandler as SubmitHandler<FieldValues>)}
+        noValidate
+        className={className}
+      >
         {children}
       </form>
     </FormProvider>

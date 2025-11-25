@@ -79,3 +79,28 @@ export interface StoryItem {
 }
 
 export type ReactionType = 'like' | 'comment' | 'share';
+
+export interface User {
+  id: string;
+  name: string;
+  email: string;
+}
+
+export interface AuthState {
+  user: User | null;
+  token: string | null;
+  isLoading: boolean;
+  error: string | null;
+  isAuthenticated: boolean;
+}
+
+export type CreatePostInput = {
+  content: string;
+  isPrivate?: boolean;
+  image?: File | null;
+};
+
+export type UpdatePostInput = {
+  content?: string;
+  isPrivate?: boolean;
+};
