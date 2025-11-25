@@ -1,11 +1,23 @@
+'use client';
 import FeedContent from '@/components/feed/content';
 import Header from '@/components/layout/header';
 import LeftSidebar from '@/components/layout/left-sidebar';
 import MobileNavigation from '@/components/layout/mobile-navigation';
 import RightSidebar from '@/components/layout/right-sidebar';
 import ThemeSwitcher from '@/components/ui/theme-switcher';
+import { getCurrentUser } from '@/redux/features/authSlice';
+import { useAppDispatch, useAppSelector } from '@/redux/hooks';
+import { useEffect } from 'react';
 
 export default function Home() {
+  const { user } = useAppSelector((state) => state.auth);
+  const dispatch = useAppDispatch();
+
+  useEffect(() => {
+    if (!user) {
+      dispatch(getCurrentUser());
+    }
+  }, [user, dispatch]);
   return (
     <div>
       <div className='_layout _layout_main_wrapper'>

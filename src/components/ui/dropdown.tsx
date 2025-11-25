@@ -2,13 +2,18 @@
 
 import { PROFILE_DROPDOWN } from '@/constrants';
 import Icons from '@/lib/icons';
+import { logout } from '@/redux/features/authSlice';
+import { useAppDispatch, useAppSelector } from '@/redux/hooks';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useState, useRef, useEffect } from 'react';
 
 const HeaderDropDown = () => {
+  const { user } = useAppSelector((state) => state.auth);
   const [isDropShow, setIsDropShow] = useState(false);
   const dropdownRef = useRef<HTMLDivElement | null>(null);
+
+  const dispatch = useAppDispatch();
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -58,7 +63,7 @@ const HeaderDropDown = () => {
         />
       </div>
       <div className='_header_nav_dropdown'>
-        <span className='_header_nav_para'>Dylan Field</span>
+        <span className='_header_nav_para'>{user?.name}</span>
         <button
           id='_profile_drop_show_btn'
           className='_header_nav_dropdown_btn _dropdown_toggle'
@@ -85,7 +90,7 @@ const HeaderDropDown = () => {
             />
           </div>
           <div className='_nav_profile_dropdown_info_txt'>
-            <h4 className='_nav_dropdown_title'>Dylan Field</h4>
+            <h4 className='_nav_dropdown_title'>{user?.name}</h4>
             <Link
               href='/profile'
               className='_nav_drop_profile text-decoration-none'
@@ -116,6 +121,23 @@ const HeaderDropDown = () => {
               </Link>
             </li>
           ))}
+          <li className='_nav_dropdown_list_item'>
+            <Link
+              href='/login'
+              className='_nav_dropdown_link text-decoration-none'
+              onClick={() => dispatch(logout())}
+            >
+              <div className='_nav_drop_info'>
+                <span>
+                  <Icons.Logout className='text-dark' />
+                </span>
+                Log Out
+              </div>
+              <button type='submit' className='_nav_drop_btn_link'>
+                <Icons.ChevronRight className='text-dark' />
+              </button>
+            </Link>
+          </li>
         </ul>
       </div>
     </div>

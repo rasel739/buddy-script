@@ -1,4 +1,5 @@
 'use client';
+
 import ShapeBlock from '@/components/auth/shape-block';
 import Form from '@/components/forms/form';
 import FormCheckBox from '@/components/forms/form-checkbox';
@@ -7,50 +8,40 @@ import Button, { SocialButton } from '@/components/ui/button';
 import { RegisterFormData } from '@/types';
 import Image from 'next/image';
 import Link from 'next/link';
-import { FC, useState } from 'react';
+import { FC, useEffect } from 'react';
 import { SubmitHandler } from 'react-hook-form';
+import { useRouter } from 'next/navigation';
+import toast from 'react-hot-toast';
+import { yupResolver } from '@hookform/resolvers/yup';
+import { useAppDispatch, useAppSelector } from '@/redux/hooks';
+import { clearError, register } from '@/redux/features/authSlice';
+import { registerSchema } from '@/schema';
 
 const Register: FC = () => {
-  const [errors, setErrors] = useState<Partial<RegisterFormData>>({});
+  const dispatch = useAppDispatch();
+  const router = useRouter();
+  const { isLoading, error, isAuthenticated } = useAppSelector((state) => state.auth);
 
-  const validateForm = ({
-    repeatPassword,
-    password,
-    agreeToTerms,
-  }: {
-    repeatPassword: string;
-    password: string;
-    agreeToTerms: boolean;
-  }): boolean => {
-    const newErrors: Partial<RegisterFormData> = {};
-
-    if (password !== repeatPassword) {
-      newErrors.repeatPassword = 'Passwords do not match';
+  useEffect(() => {
+    if (isAuthenticated) {
+      router.push('/');
     }
+  }, [isAuthenticated, router]);
 
-    if (!agreeToTerms) {
-      newErrors.agreeToTerms = false;
+  useEffect(() => {
+    if (error) {
+      toast.error(error);
+      dispatch(clearError());
     }
-
-    setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
-  };
+  }, [error, dispatch]);
 
   const onSubmit: SubmitHandler<RegisterFormData> = async (data) => {
-    if (
-      validateForm({
-        repeatPassword: data.repeatPassword,
-        password: data.password,
-        agreeToTerms: data.agreeToTerms,
-      })
-    ) {
-      console.log('Registration submitted:', data);
+    const result = await dispatch(register(data));
+    if (register.fulfilled.match(result)) {
+      toast.success('Registration successful!');
+      router.push('/');
     }
   };
-
-  // const handleGoogleRegister = () => {
-  //   console.log('Google registration clicked');
-  // };
 
   return (
     <section className='_social_registration_wrapper _layout_main_wrapper'>
@@ -98,7 +89,18 @@ const Register: FC = () => {
                 <div className='_social_registration_content_bottom_txt _mar_b40'>
                   <span>Or</span>
                 </div>
-                <Form submitHandler={onSubmit}>
+                <Form
+                  submitHandler={onSubmit}
+                  resolver={yupResolver(registerSchema)}
+                  defaultValues={{
+                    firstName: '',
+                    lastName: '',
+                    email: '',
+                    password: '',
+                    repeatPassword: '',
+                    agreeToTerms: false,
+                  }}
+                >
                   <div className='_social_registration_form'>
                     <div className='row'>
                       <div className='col-xl-12 col-lg-12 col-md-12 col-sm-12'>
@@ -140,9 +142,8 @@ const Register: FC = () => {
                           name='repeatPassword'
                           label='Repeat Password'
                           type='password'
-                          id='password'
+                          id='repeatPassword'
                           className='_social_login_input'
-                          error={errors.repeatPassword}
                           required
                         />
                       </div>
@@ -169,8 +170,10 @@ const Register: FC = () => {
                             className='_btn1'
                             size='md'
                             fullWidth
+                            loading={isLoading}
+                            disabled={isLoading}
                           >
-                            Register now
+                            {isLoading ? 'Registering...' : 'Register now'}
                           </Button>
                         </div>
                       </div>
