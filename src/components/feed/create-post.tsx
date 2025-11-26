@@ -33,9 +33,13 @@ const CreatePost: FC = () => {
 
       if (createPost.fulfilled.match(result)) {
         toast.success('Post created successfully!');
+
         setPostContent('');
         setSelectedImage(null);
         setImagePreview(null);
+        if (fileInputRef.current) {
+          fileInputRef.current.value = '';
+        }
       }
     } catch (error: unknown) {
       const errorMessage = error instanceof Error ? error.message : 'Failed to create post';
@@ -55,7 +59,13 @@ const CreatePost: FC = () => {
         return;
       }
 
+      if (!file.type.startsWith('image/')) {
+        toast.error('Please select a valid image file');
+        return;
+      }
+
       setSelectedImage(file);
+
       const reader = new FileReader();
       reader.onloadend = () => {
         setImagePreview(reader.result as string);
@@ -73,24 +83,18 @@ const CreatePost: FC = () => {
   };
 
   const handleVideoClick = () => {
-    toast('Video upload coming soon!');
+    toast('Video upload coming soon!', { icon: '🎥' });
   };
 
   const handleEventClick = () => {
-    toast('Event creation coming soon!');
+    toast('Event creation coming soon!', { icon: '📅' });
   };
 
   const handleArticleClick = () => {
-    toast('Article creation coming soon!');
+    toast('Article creation coming soon!', { icon: '📝' });
   };
 
   const actionArray = [
-    {
-      id: 'photo',
-      icon: <Icons.Photo />,
-      label: 'Photo',
-      onClick: () => handlePhotoClick,
-    },
     {
       id: 'video',
       icon: <Icons.Video />,
@@ -119,8 +123,8 @@ const CreatePost: FC = () => {
             src={'/images/txt_img.png'}
             alt='Profile'
             className='_txt_img'
-            width={80}
-            height={80}
+            width={40}
+            height={40}
           />
         </div>
         <div className='form-floating _feed_inner_text_area_box_form'>
@@ -132,20 +136,30 @@ const CreatePost: FC = () => {
             onChange={(e) => setPostContent(e.target.value)}
             disabled={isLoading}
           />
-          <label className='_feed_textarea_label' htmlFor='floatingTextarea'>
-            Write something ...
-            <Icons.Pen />
-          </label>
+          {!postContent && (
+            <label className='_feed_textarea_label' htmlFor='floatingTextarea'>
+              Write something ...
+              <Icons.Pen />
+            </label>
+          )}
         </div>
       </div>
 
       {imagePreview && (
         <div className='position-relative _mar_t16'>
-          <Image src={imagePreview} alt='Preview' width={600} height={400} className='_time_img' />
+          <Image
+            src={imagePreview}
+            alt='Preview'
+            width={600}
+            height={400}
+            className='_time_img'
+            style={{ width: '100%', height: 'auto', objectFit: 'contain' }}
+          />
           <button
             type='button'
             onClick={removeImage}
             className='position-absolute top-0 end-0 m-2 btn btn-danger btn-sm'
+            disabled={isLoading}
           >
             Remove
           </button>
@@ -158,11 +172,24 @@ const CreatePost: FC = () => {
         accept='image/*'
         onChange={handleFileChange}
         style={{ display: 'none' }}
+        disabled={isLoading}
       />
 
-      {/* Desktop */}
+      {/* Desktop Actions */}
       <div className='_feed_inner_text_area_bottom'>
         <div className='_feed_inner_text_area_item'>
+          <div className={`_feed_inner_text_area_bottom_photo _feed_common`}>
+            <Button
+              variant='link'
+              icon={<Icons.Photo />}
+              iconPosition='left'
+              onClick={handlePhotoClick}
+              className='_feed_inner_text_area_bottom_photo_link'
+              disabled={isLoading}
+            >
+              Photo
+            </Button>
+          </div>
           {actionArray.map((item) => (
             <div key={item.id} className={`_feed_inner_text_area_bottom_${item.id} _feed_common`}>
               <Button
@@ -194,10 +221,22 @@ const CreatePost: FC = () => {
         </div>
       </div>
 
-      {/* Mobile */}
+      {/* Mobile Actions */}
       <div className='_feed_inner_text_area_bottom_mobile'>
         <div className='_feed_inner_text_mobile'>
           <div className='_feed_inner_text_area_item'>
+            <div className={`_feed_inner_text_area_bottom_photo _feed_common`}>
+              <Button
+                variant='link'
+                icon={<Icons.Photo />}
+                iconPosition='left'
+                onClick={handlePhotoClick}
+                className='_feed_inner_text_area_bottom_photo_link'
+                disabled={isLoading}
+              >
+                Photo
+              </Button>
+            </div>
             {actionArray.map((item) => (
               <div key={item.id} className={`_feed_inner_text_area_bottom_${item.id} _feed_common`}>
                 <Button

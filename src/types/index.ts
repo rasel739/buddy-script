@@ -15,20 +15,20 @@ export interface RegisterFormData {
 
 export interface Post {
   id: string;
+  content: string;
+  imageUrl?: string;
+  isPrivate: boolean;
   author: {
-    name: string;
-    image: string;
+    id: string;
+    fullName: string;
+    email: string;
   };
-  timeAgo: string;
-  privacy: string;
-  title?: string;
-  image?: string;
-  reactions: {
-    count: number;
-    types: string[];
-  };
-  comments: number;
-  shares: number;
+  likesCount: number;
+  commentsCount: number;
+  sharesCount: number;
+  isLiked: boolean;
+  createdAt: string;
+  updatedAt: string;
 }
 
 export interface Friend {
@@ -104,3 +104,9 @@ export type UpdatePostInput = {
   content?: string;
   isPrivate?: boolean;
 };
+
+export interface IPostLike {
+  id: string;
+  user: User;
+  createdAt: string;
+}

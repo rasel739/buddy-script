@@ -5,7 +5,6 @@ import Image from 'next/image';
 
 import { FC } from 'react';
 import StoryCard from './story-card';
-import Link from 'next/link';
 
 const StoryCarousel: FC = () => {
   const handleAddStory = () => {
