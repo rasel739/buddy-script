@@ -233,9 +233,7 @@ const CreatePost: FC = () => {
                 onClick={handlePhotoClick}
                 className='_feed_inner_text_area_bottom_photo_link'
                 disabled={isLoading}
-              >
-                Photo
-              </Button>
+              />
             </div>
             {actionArray.map((item) => (
               <div key={item.id} className={`_feed_inner_text_area_bottom_${item.id} _feed_common`}>
