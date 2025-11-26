@@ -1,9 +1,11 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import apiClient from '@/lib/axios';
-import { Post } from '@/types';
+import { Post, IPostLike } from '@/types';
 
 interface PostState {
   posts: Post[];
+  postLiked: IPostLike[];
+  like: boolean;
   currentPost: Post | null;
   isLoading: boolean;
   error: string | null;
@@ -13,6 +15,8 @@ interface PostState {
 
 const initialState: PostState = {
   posts: [],
+  postLiked: [],
+  like: false,
   currentPost: null,
   isLoading: false,
   error: null,
@@ -116,6 +120,19 @@ export const toggleLike = createAsyncThunk(
   }
 );
 
+export const getToggleLikes = createAsyncThunk(
+  'post/getToggleLiked',
+  async ({ postId, userId }: { postId: string; userId: string | null }, { rejectWithValue }) => {
+    try {
+      const response = await apiClient.get(`/post/${postId}/likes`);
+      return { userId, postId, ...response.data };
+    } catch (error: unknown) {
+      const axiosError = error as { response?: { data?: { message?: string } } };
+      return rejectWithValue(axiosError.response?.data?.message || 'Failed to toggle like');
+    }
+  }
+);
+
 const postSlice = createSlice({
   name: 'post',
   initialState,
@@ -188,11 +205,21 @@ const postSlice = createSlice({
       const post = state.posts.find((p) => p.id === action.payload.postId);
       if (post) {
         if (action.payload.liked) {
-          post.reactions.count++;
+          post.likesCount++;
         } else {
-          post.reactions.count--;
+          post.likesCount--;
         }
       }
+    });
+
+    builder.addCase(getToggleLikes.fulfilled, (state, action) => {
+      const { userId, postId, data } = action.payload;
+
+      state.postLiked = data;
+
+      state.like = state.postLiked
+        .filter((item) => item.user.id === userId)
+        .some((post) => post.id === postId);
     });
   },
 });

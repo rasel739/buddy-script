@@ -4,6 +4,7 @@ import Icons from '@/lib/icons';
 import { FC } from 'react';
 import { ReactionButton } from '../ui/button';
 import { ReactionType } from '@/types';
+import { useAppSelector } from '@/redux/hooks';
 
 interface ReactionButtonsProps {
   reacted: boolean;
@@ -12,14 +13,16 @@ interface ReactionButtonsProps {
   handleShare: () => void;
 }
 
-const ReactionButtonList: FC<ReactionButtonsProps> = ({ reacted, handleReaction, handleShare }) => {
+const ReactionButtonList: FC<ReactionButtonsProps> = ({ handleReaction, handleShare }) => {
+  const { like } = useAppSelector((state) => state.post);
+
   const buttons = [
     {
       type: 'like',
-      label: reacted ? 'Haha' : '',
+      label: like ? 'Haha' : '',
       icon: <Icons.Haha />,
       className: `_feed_inner_timeline_reaction_emoji _feed_reaction ${
-        reacted ? '_feed_reaction_active' : ''
+        like ? '_feed_reaction_active' : ''
       }`,
       onClick: handleReaction,
     },
@@ -45,7 +48,7 @@ const ReactionButtonList: FC<ReactionButtonsProps> = ({ reacted, handleReaction,
         <ReactionButton
           key={btn.type}
           reactionType={btn.type as ReactionType}
-          active={btn.type === 'like' && reacted}
+          active={btn.type === 'like' && like}
           className={btn.className}
           icon={btn.icon}
           onClick={btn.onClick}
