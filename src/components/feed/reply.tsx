@@ -11,6 +11,7 @@ import {
   toggleReplyLike,
 } from '@/redux/features/replySlice';
 import toast from 'react-hot-toast';
+import moment from 'moment';
 
 interface ReplyProps {
   commentId: string;
@@ -268,49 +269,45 @@ const Reply: FC<ReplyProps> = ({ commentId, showReplies }) => {
                     </div>
                   )}
 
-                  <div className='_comment_reply'>
-                    <div className='_comment_reply_num'>
-                      <ul className='_comment_reply_list'>
-                        <li>
-                          <span
-                            onClick={() => handleToggleLike(reply.id)}
-                            style={{ cursor: 'pointer', color: reply.isLiked ? '#1890FF' : '' }}
-                          >
-                            {reply.isLiked ? 'Liked' : 'Like'}
-                          </span>
-                        </li>
+                  <div className='mt-2 w-100'>
+                    <ul className='list-inline mb-0 d-flex align-items-center flex-wrap gap-2 small text-secondary'>
+                      <li className='list-inline-item'>
+                        <button
+                          onClick={() => handleToggleLike(reply.id)}
+                          className={`btn btn-link p-0 text-decoration-none ${
+                            reply.isLiked ? 'text-primary fw-semibold' : 'text-secondary'
+                          }`}
+                        >
+                          {reply.isLiked ? 'Liked' : 'Like'}
+                        </button>
+                      </li>
 
-                        {user?.id === reply.author.id && (
-                          <>
-                            <li>
-                              <span
-                                onClick={() => startEdit(reply.id, reply.content)}
-                                style={{ cursor: 'pointer' }}
-                              >
-                                Edit
-                              </span>
-                            </li>
-                            <li>
-                              <span
-                                onClick={() => handleDeleteReply(reply.id)}
-                                style={{ cursor: 'pointer' }}
-                              >
-                                Delete
-                              </span>
-                            </li>
-                          </>
-                        )}
+                      {user?.id === reply.author.id && (
+                        <>
+                          <li className='list-inline-item'>
+                            <button
+                              onClick={() => startEdit(reply.id, reply.content)}
+                              className='btn btn-link p-0 text-decoration-none text-secondary hover:text-primary'
+                            >
+                              Edit
+                            </button>
+                          </li>
 
-                        <li>
-                          <span className='_time_link'>
-                            {new Date(reply.createdAt).toLocaleDateString('en-US', {
-                              month: 'short',
-                              day: 'numeric',
-                            })}
-                          </span>
-                        </li>
-                      </ul>
-                    </div>
+                          <li className='list-inline-item'>
+                            <button
+                              onClick={() => handleDeleteReply(reply.id)}
+                              className='btn btn-link p-0 text-decoration-none text-danger'
+                            >
+                              Delete
+                            </button>
+                          </li>
+                        </>
+                      )}
+
+                      <li className='list-inline-item text-muted small'>
+                        {moment(reply.createdAt).fromNow()}
+                      </li>
+                    </ul>
                   </div>
                 </div>
               </div>

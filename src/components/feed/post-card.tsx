@@ -1,21 +1,23 @@
 'use client';
 import { FC, useState } from 'react';
-import Link from 'next/link';
+
 import Image from 'next/image';
 import TimelineDropdown from '../ui/timeline-dropdown';
 import TotalReaction from './total-react';
 import ReactionButtonList from './reaction-button-list';
 import CommentsList from './comment-list';
-import { useAppDispatch } from '@/redux/hooks';
+import { useAppDispatch, useAppSelector } from '@/redux/hooks';
 import { toggleLike, deletePost } from '@/redux/features/postSlice';
 import toast from 'react-hot-toast';
 import moment from 'moment';
+import PrivacyDropdown from '../auth/privacy-dropdown';
 
 interface PostCardProps {
   post: {
     id: string;
     content?: string;
     imageUrl?: string;
+    isPrivate: boolean;
     author: {
       id: string;
       fullName: string;
@@ -39,6 +41,7 @@ interface PostCardProps {
 }
 
 const PostCard: FC<PostCardProps> = ({ post }) => {
+  const { user } = useAppSelector((state) => state.auth);
   const dispatch = useAppDispatch();
   const [reacted, setReacted] = useState(post.isLiked);
 
@@ -59,7 +62,7 @@ const PostCard: FC<PostCardProps> = ({ post }) => {
       if (navigator.share) {
         await navigator.share({
           title: 'Check out this post',
-          text: post.content || post.title,
+          text: post.content,
           url: window.location.href,
         });
       } else {
@@ -90,7 +93,6 @@ const PostCard: FC<PostCardProps> = ({ post }) => {
   const displayReactionCount = post.likesCount || post.reactions?.count || 0;
   const displayCommentsCount = post.commentsCount || post.comments || 0;
   const displaySharesCount = post.sharesCount || post.shares || 0;
-  const displayPrivacy = post.privacy || 'Public';
 
   return (
     <div className='_feed_inner_timeline_post_area _b_radious6 _padd_b24 _padd_t24 _mar_b16'>
@@ -108,12 +110,17 @@ const PostCard: FC<PostCardProps> = ({ post }) => {
             </div>
             <div className='_feed_inner_timeline_post_box_txt'>
               <h4 className='_feed_inner_timeline_post_box_title'>{post.author.fullName}</h4>
-              <p className='_feed_inner_timeline_post_box_para'>
-                {moment(post.createdAt).fromNow()} . <Link href='#'>{displayPrivacy}</Link>
+              <p className='_feed_inner_timeline_post_box_para d-flex align-items-center gap-1'>
+                <span>{moment(post.createdAt).fromNow()} •</span>
+                {user?.id === post.author.id ? (
+                  <PrivacyDropdown isPrivate={post.isPrivate} postId={post.id} />
+                ) : (
+                  ''
+                )}
               </p>
             </div>
           </div>
-          <TimelineDropdown onDelete={handleDelete} />
+          <TimelineDropdown onDelete={handleDelete} userId={post.author.id} />
         </div>
 
         {post.content && <h4 className='_feed_inner_timeline_post_title'>{post.content}</h4>}

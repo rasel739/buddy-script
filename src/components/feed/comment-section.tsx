@@ -179,49 +179,54 @@ const CommentSection: FC<CommentSectionProps> = ({ comment }) => {
               </div>
             )}
 
-            <div className='_comment_reply'>
-              <div className='_comment_reply_num'>
-                <ul className='_comment_reply_list'>
-                  <li>
-                    <span
-                      onClick={handleToggleLike}
-                      style={{
-                        cursor: 'pointer',
-                        color: comment.isLiked ? '#1890FF' : '',
-                        fontWeight: comment.isLiked ? 600 : 500,
-                      }}
-                    >
-                      {comment.isLiked ? 'Liked' : 'Like'}
-                    </span>
-                  </li>
+            <div className='mt-2'>
+              <ul className='list-inline d-flex flex-wrap gap-3 mb-0 small text-secondary'>
+                <li className='list-inline-item'>
+                  <button
+                    onClick={handleToggleLike}
+                    className={`btn btn-link p-0 text-decoration-none ${
+                      comment.isLiked ? 'text-primary fw-semibold' : 'text-secondary'
+                    }`}
+                  >
+                    {comment.isLiked ? 'Liked' : 'Like'}
+                  </button>
+                </li>
 
-                  <li>
-                    <span onClick={toggleRepliesVisibility} style={{ cursor: 'pointer' }}>
-                      Reply
-                      {totalReplies > 0 && ` (${totalReplies})`}
-                    </span>
-                  </li>
+                <li className='list-inline-item'>
+                  <button
+                    onClick={toggleRepliesVisibility}
+                    className='btn btn-link p-0 text-decoration-none text-secondary'
+                  >
+                    Reply {totalReplies > 0 && `(${totalReplies})`}
+                  </button>
+                </li>
 
-                  {user?.id === comment.author.id && (
-                    <>
-                      <li>
-                        <span onClick={() => setIsEditing(true)} style={{ cursor: 'pointer' }}>
-                          Edit
-                        </span>
-                      </li>
-                      <li>
-                        <span onClick={handleDelete} style={{ cursor: 'pointer' }}>
-                          Delete
-                        </span>
-                      </li>
-                    </>
-                  )}
+                {user?.id === comment.author.id && (
+                  <>
+                    <li className='list-inline-item'>
+                      <button
+                        onClick={() => setIsEditing(true)}
+                        className='btn btn-link p-0 text-decoration-none text-secondary'
+                      >
+                        Edit
+                      </button>
+                    </li>
 
-                  <li>
-                    <span className='_time_link'>{moment(comment.createdAt).fromNow()}</span>
-                  </li>
-                </ul>
-              </div>
+                    <li className='list-inline-item'>
+                      <button
+                        onClick={handleDelete}
+                        className='btn btn-link p-0 text-decoration-none text-danger'
+                      >
+                        Delete
+                      </button>
+                    </li>
+                  </>
+                )}
+
+                <li className='list-inline-item text-muted'>
+                  {moment(comment.createdAt).fromNow()}
+                </li>
+              </ul>
             </div>
           </div>
         </div>

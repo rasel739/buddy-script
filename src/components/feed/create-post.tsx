@@ -26,7 +26,7 @@ const CreatePost: FC = () => {
       const result = await dispatch(
         createPost({
           content: postContent,
-          isPrivate: false,
+          isPrivate: true,
           image: selectedImage || undefined,
         })
       );
