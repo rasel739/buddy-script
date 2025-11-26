@@ -35,11 +35,7 @@ export const createPost = createAsyncThunk(
         formData.append('image', data.image);
       }
 
-      const response = await apiClient.post('/post', formData, {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-        },
-      });
+      const response = await apiClient.post('/post', formData);
       return response.data;
     } catch (error: unknown) {
       const axiosError = error as { response?: { data?: { message?: string } } };

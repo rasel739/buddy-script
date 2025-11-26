@@ -30,7 +30,6 @@ const FeedContent: FC = () => {
         <StoryCarousel />
         <CreatePost />
 
-        {/* Error State */}
         {error && posts.length === 0 && (
           <div className='_feed_inner_area _padd_24 text-center'>
             <p className='text-danger'>{error}</p>
@@ -40,14 +39,12 @@ const FeedContent: FC = () => {
           </div>
         )}
 
-        {/* Posts List */}
         {posts.length > 0 ? (
           <>
             {posts.map((post) => (
               <PostCard key={post.id} post={post} />
             ))}
 
-            {/* Load More Button */}
             {hasMore && (
               <div className='text-center _mar_t24 _mar_b24'>
                 <Button
@@ -61,7 +58,6 @@ const FeedContent: FC = () => {
               </div>
             )}
 
-            {/* End of Posts Message */}
             {!hasMore && posts.length > 0 && (
               <div className='text-center _mar_t24 _mar_b24'>
                 <p className='text-muted'>{"You've reached the end of the feed"}</p>
@@ -69,7 +65,6 @@ const FeedContent: FC = () => {
             )}
           </>
         ) : (
-          // Empty State
           !isLoading &&
           !error && (
             <div className='_feed_inner_area _padd_24 text-center'>
@@ -78,7 +73,6 @@ const FeedContent: FC = () => {
           )
         )}
 
-        {/* Initial Loading State */}
         {isLoading && posts.length === 0 && (
           <div className='_feed_inner_area _padd_24 text-center'>
             <div className='spinner-border text-primary' role='status'>

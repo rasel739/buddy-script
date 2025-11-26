@@ -1,14 +1,17 @@
 'use client';
 
 import Icons from '@/lib/icons';
+import { useAppSelector } from '@/redux/hooks';
 import { FC, useState, useRef, useEffect } from 'react';
 
 interface TimelineDropdownProps {
   onEdit?: () => void;
   onDelete?: () => void;
+  userId: string;
 }
 
-const TimelineDropdown: FC<TimelineDropdownProps> = ({ onEdit, onDelete }) => {
+const TimelineDropdown: FC<TimelineDropdownProps> = ({ onEdit, onDelete, userId }) => {
+  const { user } = useAppSelector((state) => state.auth);
   const [showDropdown, setShowDropdown] = useState(false);
   const dropRef = useRef<HTMLDivElement | null>(null);
 
@@ -56,6 +59,8 @@ const TimelineDropdown: FC<TimelineDropdownProps> = ({ onEdit, onDelete }) => {
     },
   ];
 
+  const dropdownListVerify = user?.id === userId ? dropdownList : dropdownList.slice(0, 3);
+
   return (
     <div className='_feed_inner_timeline_post_box_dropdown' ref={dropRef}>
       <button
@@ -69,7 +74,7 @@ const TimelineDropdown: FC<TimelineDropdownProps> = ({ onEdit, onDelete }) => {
       {showDropdown && (
         <div className='_feed_timeline_dropdown _timeline_dropdown show'>
           <ul className='_feed_timeline_dropdown_list'>
-            {dropdownList.map((item) => (
+            {dropdownListVerify.map((item) => (
               <li key={item.id} className='_feed_timeline_dropdown_item'>
                 <button
                   className='_feed_timeline_dropdown_link'
