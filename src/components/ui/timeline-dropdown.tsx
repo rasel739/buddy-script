@@ -3,16 +3,27 @@
 import Icons from '@/lib/icons';
 import { useAppSelector } from '@/redux/hooks';
 import { FC, useState, useRef, useEffect } from 'react';
+import EditPost from '../feed/edit-post';
 
 interface TimelineDropdownProps {
   onEdit?: () => void;
   onDelete?: () => void;
   userId: string;
+  post: {
+    id: string;
+    content?: string;
+    isPrivate?: boolean;
+    author: {
+      id: string;
+      name: string;
+    };
+  };
 }
 
-const TimelineDropdown: FC<TimelineDropdownProps> = ({ onEdit, onDelete, userId }) => {
+const TimelineDropdown: FC<TimelineDropdownProps> = ({ onDelete, userId, post }) => {
   const { user } = useAppSelector((state) => state.auth);
   const [showDropdown, setShowDropdown] = useState(false);
+  const [modalShow, setModalShow] = useState<boolean>(false);
   const dropRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
@@ -25,6 +36,10 @@ const TimelineDropdown: FC<TimelineDropdownProps> = ({ onEdit, onDelete, userId 
     document.addEventListener('mousedown', handleClickOutside);
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
+
+  const handleEditModal = () => {
+    setModalShow(true);
+  };
 
   const dropdownList = [
     {
@@ -49,7 +64,7 @@ const TimelineDropdown: FC<TimelineDropdownProps> = ({ onEdit, onDelete, userId 
       id: 'd4',
       label: 'Edit Post',
       icon: <Icons.Edit />,
-      action: onEdit,
+      action: handleEditModal,
     },
     {
       id: 'd5',
@@ -77,6 +92,7 @@ const TimelineDropdown: FC<TimelineDropdownProps> = ({ onEdit, onDelete, userId 
             {dropdownListVerify.map((item) => (
               <li key={item.id} className='_feed_timeline_dropdown_item'>
                 <button
+                  onClick={item.action}
                   className='_feed_timeline_dropdown_link'
                   type='button'
                   style={{ background: 'none', border: 'none' }}
@@ -89,6 +105,7 @@ const TimelineDropdown: FC<TimelineDropdownProps> = ({ onEdit, onDelete, userId 
           </ul>
         </div>
       )}
+      <EditPost post={post} show={modalShow} onClose={() => setModalShow(false)} />
     </div>
   );
 };
