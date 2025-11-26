@@ -94,6 +94,16 @@ const PostCard: FC<PostCardProps> = ({ post }) => {
   const displayCommentsCount = post.commentsCount || post.comments || 0;
   const displaySharesCount = post.sharesCount || post.shares || 0;
 
+  const editpost = {
+    id: post.id,
+    content: post.content,
+    isPrivate: post.isPrivate,
+    author: {
+      id: post.author.id,
+      name: post.author.fullName,
+    },
+  };
+
   return (
     <div className='_feed_inner_timeline_post_area _b_radious6 _padd_b24 _padd_t24 _mar_b16'>
       <div className='_feed_inner_timeline_content _padd_r24 _padd_l24'>
@@ -114,13 +124,15 @@ const PostCard: FC<PostCardProps> = ({ post }) => {
                 <span>{moment(post.createdAt).fromNow()} •</span>
                 {user?.id === post.author.id ? (
                   <PrivacyDropdown isPrivate={post.isPrivate} postId={post.id} />
+                ) : post.isPrivate ? (
+                  '🔒 Private'
                 ) : (
-                  ''
+                  '🌐 Public'
                 )}
               </p>
             </div>
           </div>
-          <TimelineDropdown onDelete={handleDelete} userId={post.author.id} />
+          <TimelineDropdown onDelete={handleDelete} userId={post.author.id} post={editpost} />
         </div>
 
         {post.content && <h4 className='_feed_inner_timeline_post_title'>{post.content}</h4>}

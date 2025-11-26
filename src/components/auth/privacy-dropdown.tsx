@@ -21,12 +21,12 @@ const PrivacyDropdown: FC<Props> = ({ isPrivate, postId }) => {
   return (
     <Dropdown drop='down'>
       <Dropdown.Toggle variant='light' id='privacy-dropdown' className='privacy-toggle-btn'>
-        {privacy ? 'Private' : 'Public'}
+        {privacy ? '🔒 Private' : '🌐 Public'}
       </Dropdown.Toggle>
 
       <Dropdown.Menu className='privacy-dropdown-menu  '>
-        <Dropdown.Item onClick={() => setPrivacy(false)}>Public</Dropdown.Item>
-        <Dropdown.Item onClick={() => setPrivacy(true)}>Private</Dropdown.Item>
+        <Dropdown.Item onClick={() => setPrivacy(false)}>🌐 Public</Dropdown.Item>
+        <Dropdown.Item onClick={() => setPrivacy(true)}>🔒 Private</Dropdown.Item>
       </Dropdown.Menu>
     </Dropdown>
   );
